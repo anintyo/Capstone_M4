@@ -1,1 +1,15 @@
+# Buat/update .gitignore
+@"
+
+# Dataset
+dataset/
+*.zip
+*.tar.gz
+*.rar
+
+# Models
 models/
+*.pt
+*.pth
+*.h5
+"@ | Out-File -FilePath .gitignore -Append -Encoding utf8
