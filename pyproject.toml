@@ -23,12 +23,13 @@ dependencies = [
     
     # Additional Core Utils
     "python-dateutil>=2.8.0,<3.0.0",
+    "opencv-python-headless (>=4.13.0.92,<5.0.0.0)",
 ]
 
 [project.optional-dependencies]
 # Video Processing Support
 video = [
-    "opencv-python>=4.8.0,<5.0.0",
+    "opencv-python-headless>=4.13.0",
 ]
 
 # Advanced Visualization
@@ -122,7 +123,6 @@ pandas = "^2.0.0"
 python-dateutil = "^2.8.0"
 
 # Optional Dependencies
-opencv-python = {version = "^4.8.0", optional = true}
 matplotlib = {version = "^3.7.0", optional = true}
 plotly = {version = "^5.17.0", optional = true}
 seaborn = {version = "^0.12.0", optional = true}
