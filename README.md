@@ -12,15 +12,14 @@ Aplikasi Object Detection berbasis YOLOv12 dengan Streamlit untuk deteksi Constr
 ```
 purwa_yolo/
 ├── models/                          # Folder untuk model .pt (gitignored)
-│   ├── best_construction.pt
-│   ├── best_vehicle.pt
-│   └── best_fruit.pt
+│   └── best_construction.pt
 ├── src/purwa_yolo/                  # Source code aplikasi
 │   ├── __init__.py
 │   └── main.py                      # Streamlit app
 ├── training_code/                   # Jupyter notebooks untuk training
 │   ├── Train YOLOv12 Construction.ipynb
-│   └── Train YOLOv12 Vehicle.ipynb
+│   ├── Train YOLOv12 Vehicle.ipynb
+│   └── Train_YOLOv12_Construction.ipynb  # Jupyter notebooks hasil training
 ├── tests/
 ├── pyproject.toml                   # Poetry dependencies
 └── README.md
@@ -61,9 +60,9 @@ from roboflow import Roboflow
 model = YOLO('yolov8n.pt')  # atau yolov12n.pt
 results = model.train(
     data='path/to/data.yaml',
-    epochs=100,
-    imgsz=640,
-    batch=16,
+    epochs=30,
+    imgsz=320,
+    batch=2,
     name='my_model'
 )
 
