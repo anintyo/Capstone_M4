@@ -4046,7 +4046,7 @@ files = [
 ]
 
 [extras]
-all = ["fpdf2", "matplotlib", "opencv-python", "openpyxl", "plotly", "psycopg2-binary", "pymongo", "python-dotenv", "reportlab", "seaborn", "sqlalchemy", "xlsxwriter"]
+all = ["fpdf2", "matplotlib", "opencv-python-headless", "openpyxl", "plotly", "psycopg2-binary", "pymongo", "python-dotenv", "reportlab", "seaborn", "sqlalchemy", "xlsxwriter"]
 database = ["psycopg2-binary", "pymongo", "sqlalchemy"]
 dev = ["black", "flake8", "isort", "mypy", "pre-commit", "pytest", "pytest-cov"]
 excel = ["openpyxl", "xlsxwriter"]
@@ -4058,4 +4058,4 @@ viz = ["matplotlib", "plotly", "seaborn"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "2c4e53f1d114af1aa38ee7875ff4b5e0431e217b0064b226698466e11c8458a7"
+content-hash = "59fb3218ecfb0d7f5c83489722eb6c0bb3a733c755125e684fd152a3f2aef2d0"
