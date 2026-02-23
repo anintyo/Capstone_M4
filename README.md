@@ -22,6 +22,7 @@ purwa_yolo/
 │   └── Train_YOLOv12_Construction.ipynb  # Jupyter notebooks hasil training
 ├── tests/
 ├── pyproject.toml                   # Poetry dependencies
+├── packages.txt                     # System packages to resolve libGL on Streamlit Cloud
 └── README.md
 ```
 
