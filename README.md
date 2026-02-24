@@ -1,6 +1,6 @@
 # 🎯 Purwa YOLO - Object Detection App
 
-Aplikasi Object Detection berbasis YOLOv12 dengan Streamlit untuk deteksi Construction Equipment, Vehicle, dan Fruit.
+Aplikasi Object Detection berbasis YOLOv12 dengan Streamlit untuk deteksi Construction Equipment.
 
 ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 ![Poetry](https://img.shields.io/badge/poetry-dependency%20management-blue)
