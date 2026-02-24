@@ -25,6 +25,10 @@ MODELS_DIR = PROJECT_ROOT / "models"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 REPORTS_DIR.mkdir(exist_ok=True)
 
+# Sample images directory — letakkan file contoh di sini
+SAMPLE_IMAGES_DIR = Path(__file__).parent / "sample_images"
+SAMPLE_IMAGES_DIR.mkdir(exist_ok=True)
+
 # ==================== SAFETY COMPLIANCE CONFIGURATION ====================
 
 # Define PPE (Personal Protective Equipment) requirements
@@ -841,43 +845,91 @@ def main():
     
     st.success(f"✅ {selected_model} model loaded successfully!")
     
-    # File upload
+    # ==================== SAMPLE IMAGES ====================
+    st.markdown("---")
+    st.subheader("🖼️ Contoh Gambar Demo")
+    st.caption("Klik salah satu gambar di bawah untuk langsung menggunakannya tanpa perlu upload manual.")
+
+    # Kumpulkan semua sample image yang tersedia
+    sample_files = sorted(SAMPLE_IMAGES_DIR.glob("*.jpg")) + \
+                   sorted(SAMPLE_IMAGES_DIR.glob("*.jpeg")) + \
+                   sorted(SAMPLE_IMAGES_DIR.glob("*.png")) + \
+                   sorted(SAMPLE_IMAGES_DIR.glob("*.webp"))
+
+    # Inisialisasi session state
+    if "selected_sample" not in st.session_state:
+        st.session_state.selected_sample = None
+
+    if sample_files:
+        # Tampilkan thumbnail grid (max 4 per baris)
+        cols_sample = st.columns(min(len(sample_files), 4))
+        for idx, sample_path in enumerate(sample_files):
+            with cols_sample[idx % 4]:
+                st.image(str(sample_path), use_container_width=True, caption=sample_path.stem)
+                if st.button(
+                    f"✅ Gunakan Ini",
+                    key=f"sample_{idx}",
+                    use_container_width=True,
+                    type="secondary"
+                ):
+                    st.session_state.selected_sample = str(sample_path)
+                    st.rerun()
+    else:
+        st.info("💡 Belum ada contoh gambar. Letakkan file gambar di folder `sample_images/` di samping `main.py`.")
+
+    # ==================== FILE UPLOAD ====================
     st.markdown("---")
     st.subheader("📤 Upload Gambar untuk Deteksi")
-    
+
     uploaded_file = st.file_uploader(
-        "Pilih gambar area konstruksi",
+        "Atau upload gambar sendiri:",
         accept_multiple_files=False,
         type=["jpg", "jpeg", "png", "webp"],
         help="Upload foto dengan format JPG, JPEG, PNG, atau WEBP"
     )
-    
+
+    # Tentukan sumber gambar aktif: upload lebih prioritas dari sample
+    active_image_bytes = None
+    active_image_label = None
+
     if uploaded_file is not None:
+        active_image_bytes = uploaded_file.getvalue()
+        active_image_label = uploaded_file.name
+        # Reset sample selection jika user upload baru
+        st.session_state.selected_sample = None
+    elif st.session_state.selected_sample:
+        sample_path = Path(st.session_state.selected_sample)
+        if sample_path.exists():
+            active_image_bytes = sample_path.read_bytes()
+            active_image_label = sample_path.name
+            st.success(f"✅ Menggunakan contoh gambar: **{sample_path.stem}**  "
+                       f"_(Upload file baru untuk mengganti)_")
+
+    # ==================== DETECTION ====================
+    if active_image_bytes is not None:
         col1, col2 = st.columns([1, 1])
         with col1:
             st.markdown("**📷 Gambar Original:**")
-            st.image(uploaded_file, use_container_width=True)
-        
+            st.image(active_image_bytes, use_container_width=True)
+
         if st.button("🔍 Detect Objects", type="primary", use_container_width=True):
-            bytes_data = uploaded_file.getvalue()
-            
             with st.spinner("🔄 Mendeteksi objek dan menganalisis keselamatan..."):
-                annotated_image_rgb, classcounts, detections = detector_pipeline_pillow(bytes_data, model)
-            
+                annotated_image_rgb, classcounts, detections = detector_pipeline_pillow(active_image_bytes, model)
+
             if annotated_image_rgb is not None:
                 with col2:
                     st.markdown("**🎯 Hasil Deteksi:**")
                     st.image(annotated_image_rgb, use_container_width=True)
-                
+
                 st.markdown("---")
                 st.subheader("📊 Object Detection Results")
-                
+
                 if classcounts:
                     cols = st.columns(min(len(classcounts), 4))
                     for idx, (class_name, count) in enumerate(classcounts.items()):
                         with cols[idx % 4]:
                             st.metric(label=class_name.replace('_', ' ').title(), value=count)
-                    
+
                     # Full Safety Compliance Dashboard (dengan analisis per-pekerja)
                     safety_result = calculate_safety_score(classcounts)
                     display_safety_dashboard(safety_result, annotated_image_rgb)
@@ -885,9 +937,9 @@ def main():
                     st.warning("⚠️ Tidak ada objek terdeteksi dalam gambar")
             else:
                 st.error("❌ Gagal melakukan deteksi. Silakan coba lagi.")
-    
+
     else:
-        st.info("👆 Upload gambar untuk memulai deteksi keselamatan konstruksi")
+        st.info("👆 Pilih contoh gambar di atas ATAU upload gambar sendiri untuk memulai deteksi.")
         st.markdown("---")
         st.markdown("**💡 Tips untuk hasil terbaik:**")
         st.markdown("""
