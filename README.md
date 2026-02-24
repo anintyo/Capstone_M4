@@ -15,7 +15,9 @@ purwa_yolo/
 │   └── best_construction.pt
 ├── src/purwa_yolo/                  # Source code aplikasi
 │   ├── __init__.py
-│   └── main.py                      # Streamlit app
+│   ├── main.py                      # Streamlit app
+│   └── sample_images/               # Contoh gambar untuk demo
+│       └── Construction-Safety-Engineer.jpg
 ├── training_code/                   # Jupyter notebooks untuk training
 │   ├── Train YOLOv12 Construction.ipynb
 │   ├── Train YOLOv12 Vehicle.ipynb
@@ -179,6 +181,11 @@ Network URL: http://192.168.x.x:8501
 
 2. **Upload Image**: Klik "Browse files" dan pilih gambar
    - Format: JPG, JPEG, PNG, WEBP
+
+   **Atau gunakan contoh gambar yang sudah tersedia** — klik tombol "✅ Gunakan Ini" di bawah thumbnail tanpa perlu upload manual:
+
+   ![Sample Image Demo](src/purwa_yolo/sample_images/Construction-Safety-Engineer.jpg)
+   > *Contoh: Pelatihan APD di area konstruksi — safety engineer mendemonstrasikan penggunaan harness*
 
 3. **Detect Objects**: Klik tombol "🔍 Detect Objects"
 
